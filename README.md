@@ -24,5 +24,6 @@
 
 ### Execução do projeto
 1. Executar com `npm run start`
+2. Debugar com `npm run debug`
 
 ### Arquitetura
