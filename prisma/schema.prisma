@@ -1,0 +1,58 @@
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  nome  String?
+  bio   String?
+  role  Role    @default(USER)
+  senha String
+
+  projetos Projeto[] @relation("userProjetos")
+}
+
+model Projeto {
+  id             Int                   @id @default(autoincrement())
+  nome           String
+  resumo         String
+  link_externo   String
+  users          User[]                @relation("userProjetos")
+  palavras_chave Palavra_Chave[]       @relation("ProjetoPalavrasChaves")
+  conhecimentos  ProjetoConhecimento[]
+}
+
+model Palavra_Chave {
+  id       Int       @id @default(autoincrement())
+  texto    String
+  projetos Projeto[] @relation("ProjetoPalavrasChaves")
+}
+
+model Conhecimento {
+  id       Int                   @id @default(autoincrement())
+  titulo   String                @unique
+  projetos ProjetoConhecimento[]
+}
+
+model ProjetoConhecimento {
+  id             Int @id @default(autoincrement())
+  projetoId      Int
+  conhecimentoId Int
+  nivel          Int @default(1)
+
+  projeto      Projeto      @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  conhecimento Conhecimento @relation(fields: [conhecimentoId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
