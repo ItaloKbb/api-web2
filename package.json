@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "npm install && node src/server.js",
     "debug": "npx nodemon src/server.js"
   },
   "author": "",

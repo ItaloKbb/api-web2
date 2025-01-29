@@ -20,9 +20,9 @@
 3. Criada com conhecimentos na materia "Desenvolvimento web 2" na UTFPR
 
 ### Requisitos
-1. Npm
+1. Npm e Node
 
-### Execução do projeto
+### Comandos de execução do projeto
 1. Executar com `npm run start`
 2. Debugar com `npm run debug`
 
