@@ -2,7 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const validate = require('../middleware/beanValidation');
 const router = express.Router();
-const ProjetosController = require('../controllers/projetosController');
+const ProjetosController = require('../controllers/projetoController');
 const authenticateToken = require('../middleware/authMiddleware');
 
 // Esquema de validação para projeto

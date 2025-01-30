@@ -19,7 +19,6 @@ class ProjetosService {
                 include: {
                     users: true,
                     palavras_chave: true,
-                    conhecimentos: true,
                 },
             });
 
@@ -70,7 +69,6 @@ class ProjetosService {
                 include: {
                     users: true,
                     palavras_chave: true,
-                    conhecimentos: true,
                 },
             });
             return projeto;

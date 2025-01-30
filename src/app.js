@@ -3,9 +3,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const usersRouter = require('./routes/users');
 const conhecimentosRouter = require('./routes/conhecimentos');
-const projetosRouter = require('./routes/projetos');
-const palavrasChaveRouter = require('./routes/palavrasChave');
-const userConhecimentoRouter = require('./routes/userConhecimento');
+const projetosRouter = require('./routes/projetosRoutes');
+const palavrasChaveRouter = require('./routes/palavrasChaveRoutes');
+const userConhecimentoRouter = require('./routes/userConhecimentoRoutes');
 
 const app = express();
 

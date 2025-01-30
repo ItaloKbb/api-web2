@@ -17,7 +17,7 @@ class ConhecimentosService {
                 skip,
                 take: limit,
                 include: {
-                    projetos: false,
+                    user: true,
                 },
             });
 
@@ -58,7 +58,7 @@ class ConhecimentosService {
             const conhecimento = await prisma.conhecimento.findUnique({
                 where: { id },
                 include: {
-                    projetos: false,
+                    user: true,
                 },
             });
             return conhecimento;
