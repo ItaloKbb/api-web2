@@ -3,6 +3,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const usersRouter = require('./routes/users');
 const conhecimentosRouter = require('./routes/conhecimentos');
+const projetosRouter = require('./routes/projetos');
+const palavrasChaveRouter = require('./routes/palavrasChave');
+const userConhecimentoRouter = require('./routes/userConhecimento');
 
 const app = express();
 
@@ -20,5 +23,8 @@ app.use(bodyParser.json());
 
 app.use('/api/users', usersRouter);
 app.use('/api/conhecimentos', conhecimentosRouter);
+app.use('/api/projetos', projetosRouter);
+app.use('/api/palavras-chave', palavrasChaveRouter);
+app.use('/api/user-conhecimento', userConhecimentoRouter);
 
 module.exports = app;
