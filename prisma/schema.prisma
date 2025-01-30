@@ -18,6 +18,7 @@ model User {
   senha String
 
   projetos Projeto[] @relation("userProjetos")
+  conhecimentos  UserConhecimento[]
 }
 
 model Projeto {
@@ -27,7 +28,6 @@ model Projeto {
   link_externo   String
   users          User[]                @relation("userProjetos")
   palavras_chave Palavra_Chave[]       @relation("ProjetoPalavrasChaves")
-  conhecimentos  ProjetoConhecimento[]
 }
 
 model Palavra_Chave {
@@ -37,18 +37,18 @@ model Palavra_Chave {
 }
 
 model Conhecimento {
-  id       Int                   @id @default(autoincrement())
-  titulo   String                @unique
-  projetos ProjetoConhecimento[]
+  id     Int                @id @default(autoincrement())
+  titulo String             @unique
+  user   UserConhecimento[]
 }
 
-model ProjetoConhecimento {
+model UserConhecimento {
   id             Int @id @default(autoincrement())
-  projetoId      Int
+  userId         Int
   conhecimentoId Int
   nivel          Int @default(1)
 
-  projeto      Projeto      @relation(fields: [projetoId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   conhecimento Conhecimento @relation(fields: [conhecimentoId], references: [id], onDelete: Cascade)
 }
 
