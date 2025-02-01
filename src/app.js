@@ -6,6 +6,7 @@ const conhecimentosRouter = require('./routes/conhecimentos');
 const projetosRouter = require('./routes/projetosRoutes');
 const palavrasChaveRouter = require('./routes/palavrasChaveRoutes');
 const userConhecimentoRouter = require('./routes/userConhecimentoRoutes');
+require('dotenv').config(); // Carrega variáveis do arquivo .env
 
 const app = express();
 

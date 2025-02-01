@@ -10,24 +10,27 @@ generator client {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  nome  String?
-  bio   String?
-  role  Role    @default(USER)
-  senha String
+  id            Int     @id @default(autoincrement())
+  email         String  @unique
+  nome          String
+  bio           String?
+  role          Role    @default(USER)
+  senha         String
+  emprego       String
+  area          String
+  nacionalidade String
 
-  projetos Projeto[] @relation("userProjetos")
-  conhecimentos  UserConhecimento[]
+  projetos      Projeto[]          @relation("userProjetos")
+  conhecimentos UserConhecimento[]
 }
 
 model Projeto {
-  id             Int                   @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   nome           String
   resumo         String
   link_externo   String
-  users          User[]                @relation("userProjetos")
-  palavras_chave Palavra_Chave[]       @relation("ProjetoPalavrasChaves")
+  users          User[]          @relation("userProjetos")
+  palavras_chave Palavra_Chave[] @relation("ProjetoPalavrasChaves")
 }
 
 model Palavra_Chave {

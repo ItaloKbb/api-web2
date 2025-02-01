@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = process.env.SECRET_KEY || 'your_secret_key';
+const SECRET_KEY = process.env.SECRET_KEY || '#$%123@2024';
 
 function validatePermissionsAdmin(req) {
     const authHeader = req.headers.authorization;
