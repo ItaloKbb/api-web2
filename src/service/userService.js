@@ -13,12 +13,40 @@ class UserService {
     async createUser(userData) {
         try {
             const { email, nome, bio, role, senha, emprego, area, nacionalidade } = userData;
+    
             if (!senha) throw new Error('Senha é obrigatória');
-
-            const senhaSecreta = await bcrypt.hash(senha, 10);
-            return await prisma.user.create({
-                data: { email, nome, bio, role, emprego, area, nacionalidade, senha: senhaSecreta }
+            
+            // 🔎 Verifica se o email ou nome já existem
+            const existingUser = await prisma.user.findFirst({
+                where: {
+                    OR: [
+                        { email: email },
+                        { nome: nome }
+                    ]
+                }
             });
+    
+            if (existingUser) {
+                throw new Error('Já existe um usuário com este email ou nome.');
+            }
+    
+            // 🔐 Criptografa a senha antes de salvar
+            const senhaSecreta = await bcrypt.hash(senha, 10);
+            
+            // 🛠️ Criação do usuário
+            return await prisma.user.create({
+                data: {
+                    email, 
+                    nome, 
+                    bio, 
+                    role, 
+                    emprego, 
+                    area, 
+                    nacionalidade, 
+                    senha: senhaSecreta
+                }
+            });
+    
         } catch (error) {
             throw new Error(`Erro ao criar usuário: ${error.message}`);
         }

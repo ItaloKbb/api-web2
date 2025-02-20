@@ -48,7 +48,14 @@ class ErrorHandler {
                   code: 'METHOD_NOT_ALLOWED',
               },
           });
-      } else if (error.message.includes('Conflito de dados')) {
+      } else if (error.message.includes('Já existe um usuário com este email ou nome')) {
+        res.status(405).json({
+            error: {
+                message: error.message,
+                code: 'METHOD_NOT_ALLOWED',
+            },
+        });
+        } else if (error.message.includes('Conflito de dados')) {
           res.status(409).json({
               error: {
                   message: error.message,

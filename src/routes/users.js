@@ -47,7 +47,7 @@ router.post('/login', UserController.login);
 router.post('/token', UserController.validateToken);
 
 // Rotas de usuários
-router.post('/', authenticateToken, validate(userSchema), UserController.createUser);
+router.post('/', validate(userSchema), UserController.createUser);
 router.get('/:id?', UserController.getUser);
 router.put('/:id', authenticateToken, UserController.updateUser);
 
