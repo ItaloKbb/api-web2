@@ -14,7 +14,7 @@ class UserService {
         try {
             const { email, nome, bio, role, senha, emprego, area, nacionalidade } = userData;
             if (!senha) throw new Error('Senha é obrigatória');
-            
+
             const senhaSecreta = await bcrypt.hash(senha, 10);
             return await prisma.user.create({
                 data: { email, nome, bio, role, emprego, area, nacionalidade, senha: senhaSecreta }
@@ -34,24 +34,43 @@ class UserService {
         try {
             const skip = (page - 1) * limit;
             const where = {};
-            
+    
             if (filters.id) where.id = parseInt(filters.id);
             if (filters.nome) where.nome = { contains: filters.nome, mode: 'insensitive' };
             if (filters.email) where.email = { contains: filters.email, mode: 'insensitive' };
-            
+    
             const users = await prisma.user.findMany({
                 where,
                 skip,
                 take: limit,
-                select: { id: true, nome: true, email: true, bio: true, role: true, emprego: true, area: true, nacionalidade: true }
+                include: {
+                    conhecimentos: {
+                        select: {
+                            nivel: true,
+                            conhecimento: {
+                                select: { titulo: true }
+                            }
+                        }
+                    },
+                    projetos: true,
+                }
             });
-            
+    
+            // Ajusta a estrutura para incluir título e nível dos conhecimentos
+            const formattedUsers = users.map(user => ({
+                ...user,
+                conhecimentos: user.conhecimentos.map(uc => ({
+                    titulo: uc.conhecimento.titulo,
+                    nivel: uc.nivel
+                }))
+            }));
+    
             const total = await prisma.user.count({ where });
-            return { data: users, total, page, totalPages: Math.ceil(total / limit) };
+            return { data: formattedUsers, total, page, totalPages: Math.ceil(total / limit) };
         } catch (error) {
             throw new Error(`Erro ao buscar usuários: ${error.message}`);
         }
-    }
+    }    
 
     /**
      * Atualiza um usuário por ID.
@@ -62,7 +81,7 @@ class UserService {
     async updateUser(id, userData, token) {
         try {
             if (!id) throw new Error('User ID é necessário');
-            
+
             const decoded = jwt.verify(token, SECRET_KEY);
             if (decoded.role !== 'ADMIN') {
                 throw new Error('Acesso negado. Somente administradores podem atualizar usuários.');
@@ -89,16 +108,16 @@ class UserService {
     async login(email, senha) {
         try {
             if (!email || !senha) throw new Error('Email e senha são obrigatórios.');
-            
+
             const user = await prisma.user.findUnique({ where: { email } });
             if (!user) throw new Error('Não existe nenhuma conta com esse email!');
-            
+
             const senhaValida = await bcrypt.compare(senha, user.senha);
             if (!senhaValida) throw new Error('Senha incorreta!');
-            
+
             const tokenPayload = { userId: user.id, email: user.email, role: user.role };
             const token = jwt.sign(tokenPayload, SECRET_KEY, { expiresIn: '10h' });
-            
+
             return { token, userId: user.id };
         } catch (error) {
             throw new Error(`Erro no login: ${error.message}`);
