@@ -6,7 +6,7 @@ const conhecimentosRouter = require('./routes/conhecimentos');
 const projetosRouter = require('./routes/projetosRoutes');
 const palavrasChaveRouter = require('./routes/palavrasChaveRoutes');
 const userConhecimentoRouter = require('./routes/userConhecimentoRoutes');
-const deepseekAiRouter = require('./routes/ai');
+//const deepseekAiRouter = require('./routes/ai');
 require('dotenv').config(); // Carrega variáveis do arquivo .env
 
 const app = express();
@@ -28,6 +28,6 @@ app.use('/api/conhecimentos', conhecimentosRouter);
 app.use('/api/projetos', projetosRouter);
 app.use('/api/palavras-chave', palavrasChaveRouter);
 app.use('/api/user-conhecimento', userConhecimentoRouter);
-app.use('/api/deepseek', deepseekAiRouter);
+//app.use('/api/deepseek', deepseekAiRouter);
 
 module.exports = app;

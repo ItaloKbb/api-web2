@@ -4,15 +4,7 @@ const ErrorHandler = require('../lib/ErrorHandler');
 class UserController {
     static async createUser(req, res) {
         try {
-            const authHeader = req.headers.authorization;
             console.log("Iniciando login")
-            const token = authHeader.split(' ')[1];
-            const decoded = UserService.validateToken(token);
-            
-            if (decoded.role !== 'ADMIN') {
-                return res.status(401).json({ error: "Usuário sem permissão" });
-            }
-            
             const user = await UserService.createUser(req.body);
             res.status(201).json(user);
         } catch (error) {
