@@ -44,7 +44,6 @@ const userSchema = Joi.object({
 
 // Rotas de autenticação
 router.post('/login', UserController.login);
-router.post('/token', UserController.validateToken);
 
 // Rotas de usuários
 router.post('/', validate(userSchema), UserController.createUser);
