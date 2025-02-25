@@ -3,20 +3,28 @@ const SECRET_KEY = process.env.SECRET_KEY || '#$%123@2024';
 const UserService = require('../service/userService');
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader.split(' ')[1];
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).json({ error: 'Token não fornecido' });
+        }
 
-  if (token == null) {
-    return res.sendStatus(401);
-  }
+        const token = authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: 'Token inválido ou ausente' });
+        }
 
-  decoded = UserService.validateToken(token);
+        const decoded = UserService.validateToken(token);
 
-  if(decoded){
-    next();
-  }else{
-    return res.sendStatus(403);
-  }
+        if (!decoded) {
+            return res.status(403).json({ error: 'Token inválido ou expirado' });
+        }
+
+        req.user = decoded; // Armazena os dados decodificados no request para uso posterior
+        next();
+    } catch (error) {
+        return res.status(500).json({ error: 'Erro ao autenticar token', details: error.message });
+    }
 };
 
 module.exports = authenticateToken;

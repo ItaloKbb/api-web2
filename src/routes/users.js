@@ -50,5 +50,6 @@ router.post('/token', UserController.validateToken);
 router.post('/', validate(userSchema), UserController.createUser);
 router.get('/:id?', UserController.getUser);
 router.put('/:id', authenticateToken, UserController.updateUser);
+router.delete('/:id', authenticateToken, UserController.deleteUser); // 🚀 Nova rota DELETE
 
 module.exports = router;
