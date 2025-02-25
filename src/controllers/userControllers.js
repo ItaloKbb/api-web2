@@ -68,8 +68,9 @@ class UserController {
             }
 
             const token = authHeader.split(' ')[1];
+            console.log(token);
             const decoded = UserService.validateToken(token);
-
+            console.log(decoded);
             if (decoded.role !== 'ADMIN') {
                 return res.status(403).json({ error: 'Acesso negado. Apenas administradores podem excluir usuários.' });
             }

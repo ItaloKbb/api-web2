@@ -133,15 +133,9 @@ class UserService {
      * @param {number} id - ID do usuário a ser excluído.
      * @param {string} token - Token JWT para validação de permissão.
      */
-    async deleteUser(id, token) {
+    async deleteUser(id) {
         try {
             if (!id) throw new Error('User ID é necessário');
-
-            const decoded = jwt.verify(token, SECRET_KEY);
-            if (decoded.role !== 'ADMIN') {
-                throw new Error('Acesso negado. Somente administradores podem excluir usuários.');
-            }
-
             const user = await prisma.user.findUnique({ where: { id: parseInt(id) } });
             if (!user) throw new Error('Usuário não encontrado.');
 
