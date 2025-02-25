@@ -90,14 +90,52 @@ class ConhecimentosService {
      */
     async deleteConhecimento(id) {
         try {
-            await prisma.conhecimento.delete({
-                where: { id },
+            const conhecimentoExistente = await prisma.conhecimento.findUnique({
+                where: { id: parseInt(id) },
             });
-            return { message: 'conhecimento removido com sucesso' };
+    
+            if (!conhecimentoExistente) {
+                return {
+                    error: {
+                        message: 'Conhecimento não encontrado.',
+                        code: 'NOT_FOUND',
+                        details: null
+                    }
+                };
+            }
+    
+            // Verifica se o conhecimento tem dependências (exemplo: referências em outra tabela)
+            const dependencias = await prisma.algumaTabelaRelacionada.findMany({
+                where: { conhecimentoId: parseInt(id) }
+            });
+    
+            if (dependencias.length > 0) {
+                return {
+                    error: {
+                        message: 'Não é possível excluir o conhecimento pois ele está sendo referenciado em outros registros.',
+                        code: 'CONFLICT',
+                        details: `Quantidade de referências: ${dependencias.length}`
+                    }
+                };
+            }
+    
+            await prisma.conhecimento.delete({
+                where: { id: parseInt(id) },
+            });
+    
+            return { message: 'Conhecimento removido com sucesso.' };
+    
         } catch (error) {
-            throw new Error(`Erro ao remover conhecimento: ${error.message}`);
+            return {
+                error: {
+                    message: 'Erro ao remover conhecimento',
+                    code: 'INTERNAL_SERVER_ERROR',
+                    details: error.message
+                }
+            };
         }
     }
+    
 }
 
 module.exports = new ConhecimentosService();
